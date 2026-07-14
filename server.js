@@ -24,6 +24,7 @@ const allowedOrigins =
     "https://user.exowa.click",
     "https://test.exowa.click",
     "https://heartfelt-dolphin-732aa6.netlify.app",
+    "https://text-user-gemini-key.netlify.app",
     "https://schoolname.exowa.click",
     "https://svn.exowa.click",
   "https://auto-paper.netlify.app", // Deployed host
