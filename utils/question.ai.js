@@ -1,15 +1,16 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY);
+//const genAI = new GoogleGenerativeAI(apiKey);
 
 const getGenerateQuestion = async ({
   className,
   subject,
   syllabus,
   chapter_from,
-  //chapter_to,
   language,
   no_of_question,
+  geminiApiKey,
 }) => {
+  const genAI = new GoogleGenerativeAI(geminiApiKey);
   // Input validation
  
   if (!className || !subject || !syllabus || !chapter_from || !language) {

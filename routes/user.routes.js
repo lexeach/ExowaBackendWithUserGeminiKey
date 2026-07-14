@@ -1,5 +1,5 @@
 const express = require("express");
-const { register, login, updateUserLimits, getUsers, showUser, updateTopicLimits } = require("../controllers/user.controller");
+const { register, login, updateUserLimits, getUsers, showUser, updateTopicLimits, getProfile, updateProfile, } = require("../controllers/user.controller");
 const { auth, adminAuth } = require("../middleware/auth");
 const { getChildrenLogin } = require("../controllers/paper.controller");
 
@@ -194,9 +194,27 @@ router.get("/", getUsers);
 
 router.get("/detail/:id", showUser);
 
+/*
+|--------------------------------------------------------------------------
+| Profile APIs
+|--------------------------------------------------------------------------
+| GET    /api/users/profile
+| PUT    /api/users/profile
+|--------------------------------------------------------------------------
+*/
+
+router.get("/profile", auth, getProfile);
+
+router.put("/profile", auth, updateProfile);
+
+/*
+|--------------------------------------------------------------------------
+| Admin APIs
+|--------------------------------------------------------------------------
+*/
+
 router.put("/:id/limits", auth, adminAuth, updateUserLimits);
 
 router.put("/topic/:id/limits", auth, adminAuth, updateTopicLimits);
-
 
 module.exports = router;

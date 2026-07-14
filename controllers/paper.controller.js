@@ -219,15 +219,27 @@ exports.createPaper = async (req, res) => {
       );
     }
 
-    let generatedPapers = await getGenerateQuestion({
-      className,
-      subject,
-      syllabus,
-      chapter_from,
-      //chapter_to,
-      language,
-      no_of_question,
-    });
+    const currentUser = await User.findById(userId).select(
+  "+geminiApiKey"
+);
+
+if (!currentUser?.geminiApiKey) {
+  return customErrorResponse(
+    res,
+    400,
+    "Please save your Gemini API key from the profile page before generating papers."
+  );
+}
+
+let generatedPapers = await getGenerateQuestion({
+  className,
+  subject,
+  syllabus,
+  chapter_from,
+  language,
+  no_of_question,
+  geminiApiKey: currentUser.geminiApiKey,
+});
 
     const otp = Math.floor(10000 + Math.random() * 90000) //generateOTP(5);
     

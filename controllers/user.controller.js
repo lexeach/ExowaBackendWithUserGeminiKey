@@ -97,6 +97,69 @@ exports.updateUserLimits = async (req, res) => {
   }
 };
 
+
+exports.getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select(
+      "name email role isGeminiApiConfigured"
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const { geminiApiKey } = req.body;
+
+    if (!geminiApiKey || !geminiApiKey.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Gemini API key is required",
+      });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        geminiApiKey: geminiApiKey.trim(),
+        isGeminiApiConfigured: true,
+      },
+      {
+        new: true,
+      }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Gemini API key saved successfully",
+      data: {
+        id: user._id,
+        isGeminiApiConfigured: true,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 exports.updateTopicLimits = async (req, res) => {
   const { id } = req.params;
   const { topicLimit } = req.body;
@@ -325,6 +388,26 @@ exports.getUsers = async (req, res) => {
     return errorResponse(res, error);
   }
 };
+
+// controllers/user.controller.js
+const User = require('../models/user.model');
+
+// GET /api/user/gemini-key
+exports.getGeminiKey = (req, res) => {
+  res.json({ geminiKey: req.user.geminiKey || null });
+};
+
+// POST /api/user/gemini-key
+exports.setGeminiKey = async (req, res) => {
+  const { geminiKey } = req.body;
+  if (!geminiKey) {
+    return res.status(400).json({ error: "API key is required." });
+  }
+  req.user.geminiKey = geminiKey.trim();
+  await req.user.save();
+  res.json({ success: true });
+};
+
 
 exports.showUser = async (req, res) => {
   const { id } = req.params;

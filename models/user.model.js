@@ -2,17 +2,53 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    isDeleted: { type: Boolean, default: false },
+    name: {
+      type: String,
+      required: true,
+    },
+
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+
+    password: {
+      type: String,
+      required: true,
+    },
+
+    geminiApiKey: {
+      type: String,
+      default: null,
+      select: false, // Prevents the API key from being returned in normal queries
+    },
+
+    isGeminiApiConfigured: {
+      type: Boolean,
+      default: false,
+    },
+
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+
     role: {
       type: String,
       enum: ["child", "parent", "admin"],
       default: "parent",
     },
-    childLimit: { type: Number, default: 1, min: 0 },
+
+    childLimit: {
+      type: Number,
+      default: 1,
+      min: 0,
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
+
 module.exports = mongoose.model("User", userSchema);
