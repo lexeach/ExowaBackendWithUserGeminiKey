@@ -390,7 +390,7 @@ exports.getUsers = async (req, res) => {
 };
 
 // controllers/user.controller.js
-const User = require('../models/user.model');
+//const User = require('../models/user.model');
 
 // GET /api/user/gemini-key
 exports.getGeminiKey = (req, res) => {
